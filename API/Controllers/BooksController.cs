@@ -23,7 +23,7 @@ public class BooksController : ControllerBase
     }
 
     // GET: api/Books/5
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<Book>> GetBook(int id)
     {
         var book = await _context.Books.FindAsync(id);
@@ -38,7 +38,7 @@ public class BooksController : ControllerBase
 
     // PUT: api/Books/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> PutBook(int id, Book book)
     {
         if (id != book.Id)
@@ -75,11 +75,11 @@ public class BooksController : ControllerBase
         _context.Books.Add(book);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetBook", new { id = book.Id }, book);
+        return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
     }
 
     // DELETE: api/Books/5
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteBook(int id)
     {
         var book = await _context.Books.FindAsync(id);

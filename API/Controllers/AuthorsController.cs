@@ -23,7 +23,7 @@ public class AuthorsController : ControllerBase
     }
 
     // GET: api/Authors/5
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<Author>> GetAuthor(int id)
     {
         var author = await _context.Authors.FindAsync(id);
@@ -38,7 +38,7 @@ public class AuthorsController : ControllerBase
 
     // PUT: api/Authors/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> PutAuthor(int id, Author author)
     {
         if (id != author.Id)
@@ -79,7 +79,7 @@ public class AuthorsController : ControllerBase
     }
 
     // DELETE: api/Authors/5
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteAuthor(int id)
     {
         var author = await _context.Authors.FindAsync(id);

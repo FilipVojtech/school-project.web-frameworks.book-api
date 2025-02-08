@@ -23,7 +23,7 @@ public class PublishersController : ControllerBase
     }
 
     // GET: api/Publishers/5
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<Publisher>> GetPublisher(int id)
     {
         var publisher = await _context.Publishers.FindAsync(id);
@@ -38,7 +38,7 @@ public class PublishersController : ControllerBase
 
     // PUT: api/Publishers/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<IActionResult> PutPublisher(int id, Publisher publisher)
     {
         if (id != publisher.Id)
@@ -75,11 +75,11 @@ public class PublishersController : ControllerBase
         _context.Publishers.Add(publisher);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetPublisher", new { id = publisher.Id }, publisher);
+        return CreatedAtAction(nameof(GetPublisher), new { id = publisher.Id }, publisher);
     }
 
     // DELETE: api/Publishers/5
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeletePublisher(int id)
     {
         var publisher = await _context.Publishers.FindAsync(id);
