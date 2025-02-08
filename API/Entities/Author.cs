@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Entities;
 
 [Table("authors")]
+[Index(nameof(FirstName), nameof(LastName), Name = "Author_Unique_Full_Name", IsUnique = true)]
 public class Author
 {
     [Key]
