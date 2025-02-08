@@ -20,9 +20,9 @@ public class Book
     [Column("isbn")]
     public string? Isbn { get; set; } = null;
 
-    [Column("author_id")]
+    [ForeignKey("author_id")]
     public required Author Author { get; set; }
     
-    [Column("publisher_id")]
+    [ForeignKey("publisher_id")]
     public required Publisher Publisher { get; set; }
 }
