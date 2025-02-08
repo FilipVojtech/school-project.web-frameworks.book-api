@@ -25,4 +25,6 @@ public class Author
     public DateOnly? DateOfPassing { get; set; }
 
     public virtual ICollection<Book> Books { get; } = [];
+
+    public int Age => (DateOfPassing?.Year ?? DateTime.Now.Year) - BirthDate.Year;
 }
