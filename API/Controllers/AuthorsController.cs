@@ -40,7 +40,7 @@ public class AuthorsController : ControllerBase
 
     // GET: api/Authors/5
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Author>> GetAuthor(int id)
+    public async Task<ActionResult<AuthorDto>> GetAuthor(int id)
     {
         var author = await _context.Authors.FindAsync(id);
 
@@ -49,7 +49,7 @@ public class AuthorsController : ControllerBase
             return NotFound();
         }
 
-        return author;
+        return new AuthorDto(author);
     }
 
     // PUT: api/Authors/5
