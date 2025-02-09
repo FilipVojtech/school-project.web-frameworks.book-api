@@ -15,6 +15,11 @@ public class AuthorsController : ControllerBase
         _context = context;
     }
 
+    private bool AuthorExists(int id)
+    {
+        return _context.Authors.Any(e => e.Id == id);
+    }
+
     // GET: api/Authors
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
@@ -94,8 +99,4 @@ public class AuthorsController : ControllerBase
         return NoContent();
     }
 
-    private bool AuthorExists(int id)
-    {
-        return _context.Authors.Any(e => e.Id == id);
-    }
 }
