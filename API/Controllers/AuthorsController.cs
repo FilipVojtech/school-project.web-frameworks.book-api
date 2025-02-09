@@ -172,6 +172,10 @@ public class AuthorsController : ControllerBase
         {
             author.Books.Remove(book);
         }
+        else
+        {
+            return NotFound("Book not found for this author");
+        }
 
         return NoContent();
     }
