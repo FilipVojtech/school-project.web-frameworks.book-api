@@ -34,7 +34,7 @@ public class AuthorsController : ControllerBase
     {
         if (!_context.Authors.Any())
         {
-            return NotFound();
+            return Ok(new List<AuthorDto>());
         }
 
         var authors = await _context.Authors
@@ -103,7 +103,7 @@ public class AuthorsController : ControllerBase
             BirthDate = authorDto.BirthDate,
             DateOfPassing = authorDto.DateOfPassing ?? null,
         };
-        
+
         _context.Authors.Add(author);
         await _context.SaveChangesAsync();
 
