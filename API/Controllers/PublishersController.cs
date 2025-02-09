@@ -114,4 +114,18 @@ public class PublishersController : ControllerBase
 
         return NoContent();
     }
+
+    // GET: /api/Publishers/5/books
+    [HttpGet("{id:int}/books")]
+    public async Task<ActionResult<AuthorBooksDto>> GetAuthorBooks(int id)
+    {
+        var publisher = await _context.Publishers.FindAsync(id);
+
+        if (publisher == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(new PublisherBooksDto(publisher));
+    }
 }
