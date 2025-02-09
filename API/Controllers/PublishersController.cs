@@ -123,7 +123,7 @@ public class PublishersController : ControllerBase
 
     // GET: /api/Publishers/5/books
     [HttpGet("{id:int}/books")]
-    public async Task<ActionResult<AuthorBooksDto>> GetAuthorBooks(int id)
+    public async Task<ActionResult<PublisherBooksDto>> GetPublisherBooks(int id)
     {
         var publisher = await _context.Publishers.FindAsync(id);
 
