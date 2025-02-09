@@ -21,6 +21,11 @@ public class AuthorsController : ControllerBase
         return _context.Authors.Any(e => e.Id == id);
     }
 
+    private bool BookExists(int id)
+    {
+        return _context.Books.Any(b => b.Id == id);
+    }
+
     #region Author Actions
 
     // GET: api/Authors
@@ -127,6 +132,29 @@ public class AuthorsController : ControllerBase
         var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
 
         return Ok(new AuthorBooksDto(author!));
+    }
+
+    // POST: /api/Authors/5/books
+    [HttpPost("{id:int}/books")]
+    public async Task<IActionResult> AddBookToAuthor(int id, int bookId)
+    {
+        if (!AuthorExists(id))
+        {
+            return NotFound();
+        }
+
+        if (!BookExists(id))
+        {
+            return BadRequest("Specified Book ID could not be found.");
+        }
+
+        var book = _context.Books.FirstOrDefault(b => b.Id == bookId)!;
+        var author = _context.Authors.FirstOrDefault(a => a.Id == id);
+
+        author!.Books.Add(book);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetAuthorBooks), new { id = author.Id }, new AuthorBooksDto(author));
     }
 
     #endregion
