@@ -1,3 +1,4 @@
+using API.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Entities;
@@ -22,9 +23,18 @@ public class BooksController : ControllerBase
 
     // GET: api/Books
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+    public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks()
     {
-        return await _context.Books.ToListAsync();
+        if (!_context.Books.Any())
+        {
+            return Ok(new List<BookDto>());
+        }
+
+        var books = await _context.Books
+            .Select(b => new BookDto(b))
+            .ToListAsync();
+
+        return Ok(books);
     }
 
     // GET: api/Books/5
