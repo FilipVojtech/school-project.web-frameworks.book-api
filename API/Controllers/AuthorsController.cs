@@ -61,29 +61,31 @@ public class AuthorsController : ControllerBase
     // PUT: api/Authors/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutAuthor(int id, Author author)
+    public async Task<IActionResult> PutAuthor(int id, AuthorPutDto authorDto)
     {
-        if (id != author.Id)
+        if (id != authorDto.Id)
         {
             return BadRequest();
         }
 
-        _context.Entry(author).State = EntityState.Modified;
+        var author = await _context.Authors.FindAsync(id);
+        if (author == null)
+        {
+            return NotFound();
+        }
+
+        author.FirstName = authorDto.FirstName;
+        author.LastName = authorDto.LastName;
+        author.BirthDate = authorDto.BirthDate;
+        author.DateOfPassing = authorDto.DateOfPassing;
 
         try
         {
             await _context.SaveChangesAsync();
         }
-        catch (DbUpdateConcurrencyException)
+        catch (DbUpdateConcurrencyException) when (!AuthorExists(id))
         {
-            if (!AuthorExists(id))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
+            return NotFound();
         }
 
         return NoContent();
@@ -117,7 +119,7 @@ public class AuthorsController : ControllerBase
     }
 
     #endregion
-    
+
     #region Author Book Actions
 
     // GET: /api/Authors/5/books
