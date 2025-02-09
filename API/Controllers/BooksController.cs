@@ -31,6 +31,9 @@ public class BooksController : ControllerBase
         }
 
         var books = await _context.Books
+            .AsNoTracking()
+            .Include(b => b.Publisher)
+            .Include(b => b.Author)
             .Select(b => new BookDto(b))
             .ToListAsync();
 
@@ -41,7 +44,11 @@ public class BooksController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<ActionResult<BookDto>> GetBook(int id)
     {
-        var book = await _context.Books.FindAsync(id);
+        var book = await _context.Books
+            .AsNoTracking()
+            .Include(b => b.Publisher)
+            .Include(b => b.Author)
+            .FirstOrDefaultAsync(b => b.Id == id);
 
         if (book == null)
         {
@@ -120,7 +127,7 @@ public class BooksController : ControllerBase
             Author = author,
             Publisher = publisher,
         };
-        
+
         _context.Books.Add(book);
         await _context.SaveChangesAsync();
 
