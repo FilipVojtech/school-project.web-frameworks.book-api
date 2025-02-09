@@ -33,6 +33,7 @@ public class PublishersController : ControllerBase
         }
 
         var publishers = await _context.Publishers
+            .AsNoTracking()
             .Select(p => new PublisherDto(p))
             .ToListAsync();
 
@@ -43,7 +44,9 @@ public class PublishersController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<ActionResult<PublisherDto>> GetPublisher(int id)
     {
-        var publisher = await _context.Publishers.FindAsync(id);
+        var publisher = await _context.Publishers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == id);
 
         if (publisher == null)
         {

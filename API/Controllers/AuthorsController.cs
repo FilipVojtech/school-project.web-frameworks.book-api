@@ -38,6 +38,7 @@ public class AuthorsController : ControllerBase
         }
 
         var authors = await _context.Authors
+            .AsNoTracking()
             .Select(a => new AuthorDto(a))
             .ToListAsync();
 
@@ -48,7 +49,9 @@ public class AuthorsController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<ActionResult<AuthorDto>> GetAuthor(int id)
     {
-        var author = await _context.Authors.FindAsync(id);
+        var author = await _context.Authors
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.Id == id);
 
         if (author == null)
         {
