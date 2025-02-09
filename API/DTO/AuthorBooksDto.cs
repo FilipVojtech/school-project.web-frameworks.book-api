@@ -8,11 +8,11 @@ public class AuthorBooksDto(Author author)
 
     public string Name { get; set; } = author.FullName;
 
-    public ICollection<BookDto> Books { get; set; } = author.Books
-        .Select(b => new BookDto(b))
+    public ICollection<AuthorBooksBookDto> Books { get; set; } = author.Books
+        .Select(b => new AuthorBooksBookDto(b))
         .ToList();
 
-    public class BookDto(Book book)
+    public class AuthorBooksBookDto(Book book)
     {
         public int Id { get; set; } = book.Id;
 
