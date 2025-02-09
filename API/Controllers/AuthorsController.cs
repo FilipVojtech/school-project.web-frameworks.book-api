@@ -167,6 +167,7 @@ public class AuthorsController : ControllerBase
         return CreatedAtAction(nameof(GetAuthorBooks), new { id = author.Id }, new AuthorBooksDto(author));
     }
 
+    // DELETE: /api/Authors/5/books
     [HttpDelete("{id:int}/books")]
     public async Task<IActionResult> RemoveBookFromAuthor(int id, int bookId)
     {
@@ -181,6 +182,7 @@ public class AuthorsController : ControllerBase
         if (book != null)
         {
             author.Books.Remove(book);
+            await _context.SaveChangesAsync();
         }
         else
         {
