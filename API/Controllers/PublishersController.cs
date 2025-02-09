@@ -21,6 +21,8 @@ public class PublishersController : ControllerBase
         return _context.Publishers.Any(e => e.Id == id);
     }
 
+    #region Publisher Actions
+
     // GET: api/Publishers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PublisherDto>>> GetPublishers()
@@ -92,7 +94,7 @@ public class PublishersController : ControllerBase
             Name = publisherDto.Name,
             Url = publisherDto.Url,
         };
-        
+
         _context.Publishers.Add(publisher);
         await _context.SaveChangesAsync();
 
@@ -115,6 +117,10 @@ public class PublishersController : ControllerBase
         return NoContent();
     }
 
+    #endregion
+
+    #region Publisher Book Actions
+
     // GET: /api/Publishers/5/books
     [HttpGet("{id:int}/books")]
     public async Task<ActionResult<AuthorBooksDto>> GetAuthorBooks(int id)
@@ -128,4 +134,6 @@ public class PublishersController : ControllerBase
 
         return Ok(new PublisherBooksDto(publisher));
     }
+
+    #endregion
 }
