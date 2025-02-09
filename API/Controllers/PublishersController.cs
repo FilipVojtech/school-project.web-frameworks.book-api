@@ -135,5 +135,28 @@ public class PublishersController : ControllerBase
         return Ok(new PublisherBooksDto(publisher));
     }
 
+    // POST: /api/Publishers/5/books
+    [HttpPost("{id:int}/books")]
+    public async Task<IActionResult> AddBookToPublisher(int id, int bookId)
+    {
+        var book = await _context.Books.FindAsync(bookId);
+        var publisher = await _context.Publishers.FindAsync(id);
+
+        if (publisher == null)
+        {
+            return NotFound();
+        }
+
+        if (book == null)
+        {
+            return BadRequest("Specified Book ID could not be found.");
+        }
+
+        publisher.Books.Add(book);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetPublisherBooks), new { id = publisher.Id }, new PublisherBooksDto(publisher));
+    }
+
     #endregion
 }
