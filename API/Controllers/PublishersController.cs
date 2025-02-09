@@ -39,7 +39,7 @@ public class PublishersController : ControllerBase
 
     // GET: api/Publishers/5
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Publisher>> GetPublisher(int id)
+    public async Task<ActionResult<PublisherDto>> GetPublisher(int id)
     {
         var publisher = await _context.Publishers.FindAsync(id);
 
@@ -48,7 +48,7 @@ public class PublishersController : ControllerBase
             return NotFound();
         }
 
-        return publisher;
+        return Ok(new PublisherDto(publisher));
     }
 
     // PUT: api/Publishers/5
