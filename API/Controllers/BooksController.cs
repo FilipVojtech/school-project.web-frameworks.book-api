@@ -99,12 +99,32 @@ public class BooksController : ControllerBase
     // POST: api/Books
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<Book>> PostBook(Book book)
+    public async Task<ActionResult<BookDto>> PostBook(BookPutDto bookDto)
     {
+        var author = await _context.Authors.FindAsync(bookDto.AuthorId);
+        if (author == null)
+        {
+            return NotFound("Specified Author ID could not be found.");
+        }
+
+        var publisher = await _context.Publishers.FindAsync(bookDto.PublisherId);
+        if (publisher == null)
+        {
+            return NotFound("Specified Publisher ID could not be found.");
+        }
+
+        var book = new Book
+        {
+            Title = bookDto.Title,
+            Isbn = bookDto.Isbn,
+            Author = author,
+            Publisher = publisher,
+        };
+        
         _context.Books.Add(book);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
+        return CreatedAtAction(nameof(GetBook), new { id = book.Id }, new BookDto(book));
     }
 
     // DELETE: api/Books/5
