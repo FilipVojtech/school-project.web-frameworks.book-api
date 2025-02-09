@@ -158,5 +158,31 @@ public class PublishersController : ControllerBase
         return CreatedAtAction(nameof(GetPublisherBooks), new { id = publisher.Id }, new PublisherBooksDto(publisher));
     }
 
+    // DELETE: /api/Publishers/5/books
+    [HttpDelete("{id:int}/books")]
+    public async Task<IActionResult> RemoveBookFromPublisher(int id, int bookId)
+    {
+        var publisher = await _context.Publishers.FindAsync(id);
+
+        if (publisher == null)
+        {
+            return NotFound();
+        }
+
+        var book = publisher.Books.FirstOrDefault(b => b.Id == bookId);
+
+        if (book != null)
+        {
+            publisher.Books.Remove(book);
+            await _context.SaveChangesAsync();
+        }
+        else
+        {
+            return NotFound("Book not found for this author");
+        }
+
+        return NoContent();
+    }
+
     #endregion
 }
