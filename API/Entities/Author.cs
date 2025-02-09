@@ -28,5 +28,7 @@ public class Author
 
     public virtual ICollection<Book> Books { get; } = [];
 
+    public string FullName => $"{FirstName} {LastName}";
+
     public int Age => (DateOfPassing?.Year ?? DateTime.Now.Year) - BirthDate.Year;
 }
