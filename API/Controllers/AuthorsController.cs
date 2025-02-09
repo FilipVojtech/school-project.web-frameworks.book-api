@@ -137,14 +137,18 @@ public class AuthorsController : ControllerBase
     [HttpGet("{id:int}/books")]
     public async Task<ActionResult<AuthorBooksDto>> GetAuthorBooks(int id)
     {
-        if (!AuthorExists(id))
+        var author = await _context.Authors
+            .AsNoTracking()
+            .Include(a => a.Books)
+            .ThenInclude(b => b.Publisher)
+            .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (author == null)
         {
             return NotFound();
         }
 
-        var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
-
-        return Ok(new AuthorBooksDto(author!));
+        return Ok(new AuthorBooksDto(author));
     }
 
     // POST: /api/Authors/5/books

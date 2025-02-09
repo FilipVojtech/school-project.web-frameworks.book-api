@@ -128,7 +128,11 @@ public class PublishersController : ControllerBase
     [HttpGet("{id:int}/books")]
     public async Task<ActionResult<PublisherBooksDto>> GetPublisherBooks(int id)
     {
-        var publisher = await _context.Publishers.FindAsync(id);
+        var publisher = await _context.Publishers
+            .AsNoTracking()
+            .Include(p => p.Books)
+            .ThenInclude(b => b.Author)
+            .FirstOrDefaultAsync(p => p.Id == id);
 
         if (publisher == null)
         {
