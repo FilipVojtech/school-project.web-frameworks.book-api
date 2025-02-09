@@ -85,12 +85,18 @@ public class PublishersController : ControllerBase
     // POST: api/Publishers
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<Publisher>> PostPublisher(Publisher publisher)
+    public async Task<ActionResult<PublisherDto>> PostPublisher(PublisherDto publisherDto)
     {
+        var publisher = new Publisher
+        {
+            Name = publisherDto.Name,
+            Url = publisherDto.Url,
+        };
+        
         _context.Publishers.Add(publisher);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetPublisher), new { id = publisher.Id }, publisher);
+        return CreatedAtAction(nameof(GetPublisher), new { id = publisher.Id }, new PublisherDto(publisher));
     }
 
     // DELETE: api/Publishers/5
