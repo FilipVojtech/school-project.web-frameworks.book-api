@@ -1,3 +1,4 @@
+using API.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Entities;
@@ -86,12 +87,12 @@ public class AuthorsController : ControllerBase
     // POST: api/Authors
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<Author>> PostAuthor(Author author)
+    public async Task<ActionResult<AuthorDto>> PostAuthor(Author author)
     {
         _context.Authors.Add(author);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetAuthor), new { id = author.Id }, author);
+        return CreatedAtAction(nameof(GetAuthor), new { id = author.Id }, new AuthorDto(author));
     }
 
     // DELETE: api/Authors/5
