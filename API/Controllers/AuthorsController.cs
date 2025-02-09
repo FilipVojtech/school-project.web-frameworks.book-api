@@ -157,5 +157,24 @@ public class AuthorsController : ControllerBase
         return CreatedAtAction(nameof(GetAuthorBooks), new { id = author.Id }, new AuthorBooksDto(author));
     }
 
+    [HttpDelete("{id:int}/books")]
+    public async Task<IActionResult> RemoveBookFromAuthor(int id, int bookId)
+    {
+        if (!AuthorExists(id))
+        {
+            return NotFound();
+        }
+
+        var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
+        var book = author!.Books.FirstOrDefault(b => b.Id == bookId);
+
+        if (book != null)
+        {
+            author.Books.Remove(book);
+        }
+
+        return NoContent();
+    }
+
     #endregion
 }
