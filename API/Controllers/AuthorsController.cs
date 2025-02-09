@@ -20,11 +20,22 @@ public class AuthorsController : ControllerBase
         return _context.Authors.Any(e => e.Id == id);
     }
 
+    #region Author Actions
+
     // GET: api/Authors
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
+    public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAuthors()
     {
-        return await _context.Authors.ToListAsync();
+        if (!_context.Authors.Any())
+        {
+            return NotFound();
+        }
+
+        var authors = await _context.Authors
+            .Select(a => new AuthorDto(a))
+            .ToListAsync();
+
+        return Ok(authors);
     }
 
     // GET: api/Authors/5
@@ -99,4 +110,5 @@ public class AuthorsController : ControllerBase
         return NoContent();
     }
 
+    #endregion
 }
