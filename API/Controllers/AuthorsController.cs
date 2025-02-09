@@ -55,7 +55,7 @@ public class AuthorsController : ControllerBase
             return NotFound();
         }
 
-        return new AuthorDto(author);
+        return Ok(new AuthorDto(author));
     }
 
     // PUT: api/Authors/5
