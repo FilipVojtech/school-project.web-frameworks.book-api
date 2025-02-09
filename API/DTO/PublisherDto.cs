@@ -1,4 +1,5 @@
-﻿using API.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using API.Entities;
 
 namespace API.DTO;
 
@@ -11,7 +12,9 @@ public class PublisherDto(Publisher publisher)
 {
     public int Id { get; set; } = publisher.Id;
 
+    [Required]
     public string Name { get; set; } = publisher.Name;
 
+    [Required]
     public string? Url { get; set; } = publisher.Url;
 }
