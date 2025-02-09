@@ -54,29 +54,43 @@ public class BooksController : ControllerBase
     // PUT: api/Books/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutBook(int id, Book book)
+    public async Task<IActionResult> PutBook(int id, BookPutDto bookDto)
     {
-        if (id != book.Id)
+        if (id != bookDto.Id)
         {
             return BadRequest();
         }
 
-        _context.Entry(book).State = EntityState.Modified;
+        var author = await _context.Authors.FindAsync(bookDto.AuthorId);
+        if (author == null)
+        {
+            return NotFound("Specified Author ID could not be found.");
+        }
+
+        var publisher = await _context.Publishers.FindAsync(bookDto.PublisherId);
+        if (publisher == null)
+        {
+            return NotFound("Specified Publisher ID could not be found.");
+        }
+
+        var book = await _context.Books.FindAsync(id);
+        if (book == null)
+        {
+            return NotFound();
+        }
+
+        book.Title = bookDto.Title;
+        book.Isbn = bookDto.Isbn;
+        book.Author = author;
+        book.Publisher = publisher;
 
         try
         {
             await _context.SaveChangesAsync();
         }
-        catch (DbUpdateConcurrencyException)
+        catch (DbUpdateConcurrencyException) when (!BookExists(id))
         {
-            if (!BookExists(id))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
+            return NotFound();
         }
 
         return NoContent();
