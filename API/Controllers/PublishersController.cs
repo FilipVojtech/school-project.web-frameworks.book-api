@@ -15,6 +15,11 @@ public class PublishersController : ControllerBase
         _context = context;
     }
 
+    private bool PublisherExists(int id)
+    {
+        return _context.Publishers.Any(e => e.Id == id);
+    }
+
     // GET: api/Publishers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Publisher>>> GetPublishers()
@@ -92,10 +97,5 @@ public class PublishersController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
-    }
-
-    private bool PublisherExists(int id)
-    {
-        return _context.Publishers.Any(e => e.Id == id);
     }
 }
