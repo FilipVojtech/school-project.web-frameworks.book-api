@@ -112,4 +112,22 @@ public class AuthorsController : ControllerBase
     }
 
     #endregion
+    
+    #region Author Book Actions
+
+    // GET: /api/Authors/5/books
+    [HttpGet("{id:int}/books")]
+    public async Task<ActionResult<AuthorBooksDto>> GetAuthorBooks(int id)
+    {
+        if (!AuthorExists(id))
+        {
+            return NotFound();
+        }
+
+        var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
+
+        return Ok(new AuthorBooksDto(author!));
+    }
+
+    #endregion
 }
