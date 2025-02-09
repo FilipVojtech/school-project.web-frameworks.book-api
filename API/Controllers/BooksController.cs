@@ -39,7 +39,7 @@ public class BooksController : ControllerBase
 
     // GET: api/Books/5
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Book>> GetBook(int id)
+    public async Task<ActionResult<BookDto>> GetBook(int id)
     {
         var book = await _context.Books.FindAsync(id);
 
@@ -48,7 +48,7 @@ public class BooksController : ControllerBase
             return NotFound();
         }
 
-        return book;
+        return Ok(new BookDto(book));
     }
 
     // PUT: api/Books/5
