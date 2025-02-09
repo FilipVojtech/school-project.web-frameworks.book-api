@@ -15,6 +15,11 @@ public class BooksController : ControllerBase
         _context = context;
     }
 
+    private bool BookExists(int id)
+    {
+        return _context.Books.Any(e => e.Id == id);
+    }
+
     // GET: api/Books
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
@@ -92,10 +97,5 @@ public class BooksController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
-    }
-
-    private bool BookExists(int id)
-    {
-        return _context.Books.Any(e => e.Id == id);
     }
 }
