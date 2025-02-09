@@ -54,29 +54,29 @@ public class PublishersController : ControllerBase
     // PUT: api/Publishers/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> PutPublisher(int id, Publisher publisher)
+    public async Task<IActionResult> PutPublisher(int id, PublisherDto publisherDto)
     {
-        if (id != publisher.Id)
+        if (id != publisherDto.Id)
         {
             return BadRequest();
         }
 
-        _context.Entry(publisher).State = EntityState.Modified;
+        var publisher = await _context.Publishers.FindAsync(id);
+        if (publisher == null)
+        {
+            return NotFound();
+        }
+
+        publisher.Name = publisherDto.Name;
+        publisher.Url = publisherDto.Url;
 
         try
         {
             await _context.SaveChangesAsync();
         }
-        catch (DbUpdateConcurrencyException)
+        catch (DbUpdateConcurrencyException) when (!PublisherExists(id))
         {
-            if (!PublisherExists(id))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
+            return NotFound();
         }
 
         return NoContent();
