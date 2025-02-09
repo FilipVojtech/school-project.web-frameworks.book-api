@@ -94,8 +94,16 @@ public class AuthorsController : ControllerBase
     // POST: api/Authors
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<AuthorDto>> PostAuthor(Author author)
+    public async Task<ActionResult<AuthorDto>> PostAuthor(AuthorPutDto authorDto)
     {
+        var author = new Author
+        {
+            FirstName = authorDto.FirstName,
+            LastName = authorDto.LastName,
+            BirthDate = authorDto.BirthDate,
+            DateOfPassing = authorDto.DateOfPassing ?? null,
+        };
+        
         _context.Authors.Add(author);
         await _context.SaveChangesAsync();
 
