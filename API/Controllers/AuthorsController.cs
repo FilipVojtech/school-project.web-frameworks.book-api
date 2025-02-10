@@ -107,6 +107,11 @@ public class AuthorsController : ControllerBase
             DateOfPassing = authorDto.DateOfPassing ?? null,
         };
 
+        if (await _context.Authors.AnyAsync(a => a == author))
+        {
+            return Conflict("The Author you're attempting to add already exists.");
+        }
+
         _context.Authors.Add(author);
         await _context.SaveChangesAsync();
 
