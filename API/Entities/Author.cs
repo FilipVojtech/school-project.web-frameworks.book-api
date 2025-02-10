@@ -6,7 +6,7 @@ namespace API.Entities;
 
 [Table("authors")]
 [Index(nameof(FirstName), nameof(LastName), Name = "Author_Unique_Full_Name", IsUnique = true)]
-public class Author
+public class Author : IEquatable<Author>
 {
     [Key]
     [Column("id")]
@@ -31,4 +31,37 @@ public class Author
     public string FullName => $"{FirstName} {LastName}";
 
     public int Age => (DateOfPassing?.Year ?? DateTime.Now.Year) - BirthDate.Year;
+
+    public bool Equals(Author? other)
+    {
+        if (other is null) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return FirstName == other.FirstName
+               && LastName == other.LastName
+               && BirthDate.Equals(other.BirthDate)
+               && Nullable.Equals(DateOfPassing, other.DateOfPassing);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((Author)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(FirstName, LastName, BirthDate, DateOfPassing);
+    }
+
+    public static bool operator ==(Author? left, Author? right)
+    {
+        return Equals(left, right);
+    }
+
+    public static bool operator !=(Author? left, Author? right)
+    {
+        return !Equals(left, right);
+    }
 }
