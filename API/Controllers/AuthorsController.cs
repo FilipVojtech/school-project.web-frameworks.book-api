@@ -1,7 +1,9 @@
+using System.Net;
 using API.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Entities;
+using Microsoft.Data.Sqlite;
 
 namespace API.Controllers;
 
@@ -107,13 +109,25 @@ public class AuthorsController : ControllerBase
             DateOfPassing = authorDto.DateOfPassing ?? null,
         };
 
-        if (await _context.Authors.AnyAsync(a => a == author))
+        try
         {
-            return Conflict("The Author you're attempting to add already exists.");
+            _context.Authors.Add(author);
+            await _context.SaveChangesAsync();
         }
+        catch (Exception e)
+        {
+            if (e.InnerException is not SqliteException sqlException)
+            {
+                throw;
+            }
 
-        _context.Authors.Add(author);
-        await _context.SaveChangesAsync();
+            if (sqlException.SqliteErrorCode == 19)
+            {
+                return Conflict("The Author you're attempting to add already exists.");
+            }
+
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
 
         return CreatedAtAction(nameof(GetAuthor), new { id = author.Id }, new AuthorDto(author));
     }

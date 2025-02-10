@@ -1,7 +1,9 @@
+using System.Net;
 using API.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Entities;
+using Microsoft.Data.Sqlite;
 
 namespace API.Controllers;
 
@@ -127,14 +129,26 @@ public class BooksController : ControllerBase
             Author = author,
             Publisher = publisher,
         };
-        
-        if (await _context.Books.AnyAsync(b => b == book))
-        {
-            Conflict("The Book you're attempting to add already exists");
-        }
 
-        _context.Books.Add(book);
-        await _context.SaveChangesAsync();
+        try
+        {
+            _context.Books.Add(book);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            if (e.InnerException is not SqliteException sqlException)
+            {
+                throw;
+            }
+
+            if (sqlException.SqliteErrorCode == 19)
+            {
+                return Conflict("The Book you're attempting to add already exists");
+            }
+
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
 
         return CreatedAtAction(nameof(GetBook), new { id = book.Id }, new BookDto(book));
     }

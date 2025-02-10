@@ -1,7 +1,9 @@
+using System.Net;
 using API.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Entities;
+using Microsoft.Data.Sqlite;
 
 namespace API.Controllers;
 
@@ -98,10 +100,26 @@ public class PublishersController : ControllerBase
             Url = publisherDto.Url,
         };
 
-        if (await _context.Publishers.AnyAsync(p => p == publisher))
+        try
         {
-            return Conflict("The Publisher you're trying to add already exists");
+            _context.Publishers.Add(publisher);
+            await _context.SaveChangesAsync();
         }
+        catch (Exception e)
+        {
+            if (e.InnerException is not SqliteException sqlException)
+            {
+                throw;
+            }
+
+            if (sqlException.SqliteErrorCode == 19)
+            {
+                return Conflict("The Publisher you're trying to add already exists");
+            }
+
+            return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+        }
+
 
         _context.Publishers.Add(publisher);
         await _context.SaveChangesAsync();
