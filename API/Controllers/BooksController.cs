@@ -127,6 +127,11 @@ public class BooksController : ControllerBase
             Author = author,
             Publisher = publisher,
         };
+        
+        if (await _context.Books.AnyAsync(b => b == book))
+        {
+            Conflict("The Book you're attempting to add already exists");
+        }
 
         _context.Books.Add(book);
         await _context.SaveChangesAsync();
