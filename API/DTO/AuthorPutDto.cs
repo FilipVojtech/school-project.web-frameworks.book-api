@@ -3,18 +3,33 @@ using API.Entities;
 
 namespace API.DTO;
 
-public class AuthorPutDto(Author author)
+public class AuthorPutDto
 {
-    public int Id { get; set; } = author.Id;
+    public int Id { get; set; }
 
     [Required]
-    public string FirstName { get; set; } = author.FirstName;
+    public string FirstName { get; set; }
 
     [Required]
-    public string LastName { get; set; } = author.LastName;
+    public string LastName { get; set; }
 
     [Required]
-    public DateOnly BirthDate { get; set; } = author.BirthDate;
+    public DateOnly BirthDate { get; set; }
 
-    public DateOnly? DateOfPassing { get; set; } = author.DateOfPassing ?? null;
+    public DateOnly? DateOfPassing { get; set; }
+
+    public AuthorPutDto()
+    {
+        FirstName = string.Empty;
+        LastName = string.Empty;
+    }
+
+    public AuthorPutDto(Author author)
+    {
+        Id = author.Id;
+        FirstName = author.FirstName;
+        LastName = author.LastName;
+        BirthDate = author.BirthDate;
+        DateOfPassing = author.DateOfPassing ?? null;
+    }
 }
