@@ -3,19 +3,32 @@ using API.Entities;
 
 namespace API.DTO;
 
-public class BookPutDto(Book book)
+public class BookPutDto
 {
-    public int Id { get; set; } = book.Id;
+    public int Id { get; set; }
 
     [Required]
-    public string Title { get; set; } = book.Title;
+    public string Title { get; set; }
+
+    public string? Isbn { get; set; }
 
     [Required]
-    public string? Isbn { get; set; } = book.Isbn;
+    public int AuthorId { get; set; }
 
     [Required]
-    public int AuthorId { get; set; } = book.Author.Id;
+    public int PublisherId { get; set; }
 
-    [Required]
-    public int PublisherId { get; set; } = book.Publisher.Id;
+    public BookPutDto()
+    {
+        Title = "";
+    }
+
+    public BookPutDto(Book book)
+    {
+        Id = book.Id;
+        Title = book.Title;
+        Isbn = book.Isbn;
+        AuthorId = book.Author.Id;
+        PublisherId = book.Publisher.Id;
+    }
 }
