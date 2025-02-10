@@ -12,7 +12,7 @@ public class Program
 
         // Add services to the container.
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddJsonOptions(opt => { opt.JsonSerializerOptions.IncludeFields = true; });
         builder.Services.AddDbContext<BooksContext>(opt =>
         {
             opt.UseSqlite(
