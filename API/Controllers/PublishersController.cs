@@ -98,6 +98,11 @@ public class PublishersController : ControllerBase
             Url = publisherDto.Url,
         };
 
+        if (await _context.Publishers.AnyAsync(p => p == publisher))
+        {
+            return Conflict("The Publisher you're trying to add already exists");
+        }
+
         _context.Publishers.Add(publisher);
         await _context.SaveChangesAsync();
 
