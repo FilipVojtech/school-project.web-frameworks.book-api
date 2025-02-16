@@ -120,10 +120,6 @@ public class PublishersController : ControllerBase
             return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
         }
 
-
-        _context.Publishers.Add(publisher);
-        await _context.SaveChangesAsync();
-
         return CreatedAtAction(nameof(GetPublisher), new { id = publisher.Id }, new PublisherDto(publisher));
     }
 
