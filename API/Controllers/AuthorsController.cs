@@ -170,53 +170,53 @@ public class AuthorsController : ControllerBase
         return Ok(new AuthorBooksDto(author));
     }
 
-    // POST: /api/Authors/5/books
-    [HttpPost("{id:int}/books")]
-    public async Task<IActionResult> AddBookToAuthor(int id, int bookId)
-    {
-        if (!AuthorExists(id))
-        {
-            return NotFound();
-        }
+    // // POST: /api/Authors/5/books
+    // [HttpPost("{id:int}/books")]
+    // public async Task<IActionResult> AddBookToAuthor(int id, int bookId)
+    // {
+    //     if (!AuthorExists(id))
+    //     {
+    //         return NotFound();
+    //     }
+    //
+    //     if (!BookExists(id))
+    //     {
+    //         return BadRequest("Specified Book ID could not be found.");
+    //     }
+    //
+    //     var book = _context.Books.FirstOrDefault(b => b.Id == bookId)!;
+    //     var author = _context.Authors.FirstOrDefault(a => a.Id == id);
+    //
+    //     author!.Books.Add(book);
+    //     await _context.SaveChangesAsync();
+    //
+    //     return CreatedAtAction(nameof(GetAuthorBooks), new { id = author.Id }, new AuthorBooksDto(author));
+    // }
 
-        if (!BookExists(id))
-        {
-            return BadRequest("Specified Book ID could not be found.");
-        }
-
-        var book = _context.Books.FirstOrDefault(b => b.Id == bookId)!;
-        var author = _context.Authors.FirstOrDefault(a => a.Id == id);
-
-        author!.Books.Add(book);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetAuthorBooks), new { id = author.Id }, new AuthorBooksDto(author));
-    }
-
-    // DELETE: /api/Authors/5/books
-    [HttpDelete("{id:int}/books")]
-    public async Task<IActionResult> RemoveBookFromAuthor(int id, int bookId)
-    {
-        if (!AuthorExists(id))
-        {
-            return NotFound();
-        }
-
-        var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
-        var book = author!.Books.FirstOrDefault(b => b.Id == bookId);
-
-        if (book != null)
-        {
-            author.Books.Remove(book);
-            await _context.SaveChangesAsync();
-        }
-        else
-        {
-            return NotFound("Book not found for this author");
-        }
-
-        return NoContent();
-    }
+    // // DELETE: /api/Authors/5/books
+    // [HttpDelete("{id:int}/books")]
+    // public async Task<IActionResult> RemoveBookFromAuthor(int id, int bookId)
+    // {
+    //     if (!AuthorExists(id))
+    //     {
+    //         return NotFound();
+    //     }
+    //
+    //     var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
+    //     var book = author!.Books.FirstOrDefault(b => b.Id == bookId);
+    //
+    //     if (book != null)
+    //     {
+    //         author.Books.Remove(book);
+    //         await _context.SaveChangesAsync();
+    //     }
+    //     else
+    //     {
+    //         return NotFound("Book not found for this author");
+    //     }
+    //
+    //     return NoContent();
+    // }
 
     #endregion
 }
