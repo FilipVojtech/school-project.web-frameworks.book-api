@@ -15,7 +15,6 @@ public class PublisherDto
     [Required]
     public string Name { get; set; }
 
-    [Required]
     public string? Url { get; set; }
 
     public PublisherDto()
