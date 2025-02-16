@@ -23,7 +23,7 @@ public class PublisherDto
         Name = string.Empty;
     }
 
-    public PublisherDto(Publisher publisher, string name)
+    public PublisherDto(Publisher publisher)
     {
         Id = publisher.Id;
         Name = publisher.Name;
