@@ -3,12 +3,14 @@ using API.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Data.Sqlite;
 
 namespace API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class BooksController : ControllerBase
 {
     private readonly BooksContext _context;
@@ -25,6 +27,7 @@ public class BooksController : ControllerBase
 
     // GET: api/Books
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks()
     {
         if (!_context.Books.Any())
@@ -44,6 +47,7 @@ public class BooksController : ControllerBase
 
     // GET: api/Books/5
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     public async Task<ActionResult<BookDto>> GetBook(int id)
     {
         var book = await _context.Books
