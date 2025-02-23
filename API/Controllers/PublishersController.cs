@@ -3,12 +3,14 @@ using API.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Data.Sqlite;
 
 namespace API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class PublishersController : ControllerBase
 {
     private readonly BooksContext _context;
@@ -27,6 +29,7 @@ public class PublishersController : ControllerBase
 
     // GET: api/Publishers
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<PublisherDto>>> GetPublishers()
     {
         if (!_context.Publishers.Any())
@@ -44,6 +47,7 @@ public class PublishersController : ControllerBase
 
     // GET: api/Publishers/5
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     public async Task<ActionResult<PublisherDto>> GetPublisher(int id)
     {
         var publisher = await _context.Publishers
@@ -145,6 +149,7 @@ public class PublishersController : ControllerBase
 
     // GET: /api/Publishers/5/books
     [HttpGet("{id:int}/books")]
+    [AllowAnonymous]
     public async Task<ActionResult<PublisherBooksDto>> GetPublisherBooks(int id)
     {
         var publisher = await _context.Publishers
