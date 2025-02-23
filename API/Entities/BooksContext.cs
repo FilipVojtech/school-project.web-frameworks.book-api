@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Entities;
 
-public class BooksContext(DbContextOptions<BooksContext> options) : DbContext(options)
+public class BooksContext(DbContextOptions<BooksContext> options) : IdentityDbContext(options)
 {
     public DbSet<Book> Books { get; set; } = null!;
 
